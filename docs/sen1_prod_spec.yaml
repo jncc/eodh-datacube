@@ -1,0 +1,24 @@
+name: sentinel1
+metadata_type: eo
+description: Sentinel-1 gamma0 scenes
+
+metadata:
+  platform:
+    code: SENTINEL-1
+  instrument:
+    name: SAR
+  product_type: gamma_0
+  format:
+    name: GTIFF
+
+measurements:
+  - name: 'vv'
+    aliases: [Band 1, VV]
+    dtype: float32
+    nodata: .nan
+    units: '1'
+  - name: 'vh'
+    aliases: [Band 2, VH]
+    dtype: float32
+    nodata: .nan
+    units: '1'

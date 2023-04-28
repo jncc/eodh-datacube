@@ -1,0 +1,91 @@
+name: sentinel2
+metadata_type: eo
+description: Sentinel-2 Surface Reflectance 10 metre
+
+metadata:
+  platform:
+    code: SENTINEL-2
+  instrument:
+    name: MSI
+  product_type: ARCSI_SREF
+  format:
+    name: GTIFF
+
+measurements:
+  - name: 'blue'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_1, Blue]
+
+  - name: 'green'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_2, Green]
+
+  - name: 'red'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_3, Red]
+
+  - name: 'rededge1'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_4, RedEdge1, RE_B5]
+
+  - name: 'rededge2'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_5, RedEdge2, RE_B6]
+
+  - name: 'rededge3'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_6, RedEdge3, RE_B7]
+
+  - name: 'nir1'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_7, NIR1, NIR_B8]
+
+  - name: 'nir2'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_8, NIR2, NIR_B8A]
+
+  - name: 'swir1'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_9, SWIR1]
+
+  - name: 'swir2'
+    dtype: uint16
+    nodata: 0
+    units: '1'
+    aliases: [band_10, SWIR2]
+
+  - name: 'fmask'
+    aliases: [Cmask, Fmask]
+    dtype: uint8
+    nodata: 0
+    units: '1'
+
+  - name: 'vmask'
+    aliases: [mask, Vmask]
+    dtype: uint8
+    nodata: 0
+    units: '1'
+
+  - name: 'topomask'
+    aliases: [tmask, toposhadmask, Tmask]
+    dtype: uint8
+    nodata: 0
+    units: '1'

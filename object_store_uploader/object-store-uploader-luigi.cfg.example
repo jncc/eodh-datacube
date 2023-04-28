@@ -1,0 +1,21 @@
+[Core]
+
+[CheckProducts]
+stateLocation = object_store_uploader/test/state
+workingLocation = object_store_uploader/test/working
+ardLocation = object_store_uploader/test/data
+objectStoreBaseUrl = http://your-jasmin-object-store-name.s3-ext.jc.rl.ac.uk
+objectStoreUrlParams = ?domain=your-jasmin-object-store-name.s3-ext.jc.rl.ac.uk
+credentialsFilePath = object-store-secrets.json
+s1BucketName = sentinel1-ard
+s2BucketName = sentinel2-ard
+
+[CleanupIndexFiles]
+stateLocation = object_store_uploader/test/state
+workingLocation = object_store_uploader/test/working
+ardLocation = object_store_uploader/test/data
+objectStoreBaseUrl = http://your-jasmin-object-store-name.s3-ext.jc.rl.ac.uk
+objectStoreUrlParams = ?domain=your-jasmin-object-store-name.s3-ext.jc.rl.ac.uk
+credentialsFilePath = object-store-secrets.json
+s1BucketName = sentinel1-ard
+s2BucketName = sentinel2-ard

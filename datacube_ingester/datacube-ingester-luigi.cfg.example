@@ -1,0 +1,8 @@
+[Core]
+
+[IngestIntoDatacube]
+stateLocation = datacube_ingester/test/state
+workingLocation = datacube_ingester/test/working
+credentialsFilePath = object-store-secrets.json
+s1BucketName = sentinel1-ard
+s2BucketName = sentinel2-ard
