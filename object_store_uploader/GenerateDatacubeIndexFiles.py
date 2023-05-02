@@ -9,6 +9,7 @@ from object_store_uploader.GenerateS2IndexFile import GenerateS2IndexFile
 
 log = logging.getLogger('luigi-interface')
 
+
 @requires(GetProductLists)
 class GenerateDatacubeIndexFiles(luigi.Task):
     stateLocation = luigi.Parameter()
@@ -40,21 +41,21 @@ class GenerateDatacubeIndexFiles(luigi.Task):
 
             if productName.startswith('S1'):
                 tasks.append(GenerateS1IndexFile(
-                    product = product,
-                    indexFilePath = indexFilePath,
-                    objectStoreBaseUrl = self.objectStoreBaseUrl,
-                    objectStoreUrlParams = self.objectStoreUrlParams,
-                    s1BucketName = self.s1BucketName,
-                    testProcessing = self.testProcessing
+                    product=product,
+                    indexFilePath=indexFilePath,
+                    objectStoreBaseUrl=self.objectStoreBaseUrl,
+                    objectStoreUrlParams=self.objectStoreUrlParams,
+                    s1BucketName=self.s1BucketName,
+                    testProcessing=self.testProcessing
                 ))
             else:
                 tasks.append(GenerateS2IndexFile(
-                    product = product,
-                    indexFilePath = indexFilePath,
-                    objectStoreBaseUrl = self.objectStoreBaseUrl,
-                    objectStoreUrlParams = self.objectStoreUrlParams,
-                    s2BucketName = self.s2BucketName,
-                    testProcessing = self.testProcessing
+                    product=product,
+                    indexFilePath=indexFilePath,
+                    objectStoreBaseUrl=self.objectStoreBaseUrl,
+                    objectStoreUrlParams=self.objectStoreUrlParams,
+                    s2BucketName=self.s2BucketName,
+                    testProcessing=self.testProcessing
                 ))
 
         yield tasks
@@ -64,6 +65,6 @@ class GenerateDatacubeIndexFiles(luigi.Task):
                 'products': productsWithIndexFiles
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'GenerateDatacubeIndexFiles.json'))

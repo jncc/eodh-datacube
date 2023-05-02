@@ -8,6 +8,7 @@ from datacube_ingester.DownloadIndexFiles import DownloadIndexFiles
 
 log = logging.getLogger('luigi-interface')
 
+
 @requires(DownloadIndexFiles)
 class IngestIntoDatacube(luigi.Task):
     stateLocation = luigi.Parameter()
@@ -35,6 +36,6 @@ class IngestIntoDatacube(luigi.Task):
                 'filesIngested': files
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'IngestIntoDatacube.json'))

@@ -8,6 +8,7 @@ from object_store_uploader.CheckProducts import CheckProducts
 
 log = logging.getLogger('luigi-interface')
 
+
 @requires(CheckProducts)
 class CleanupIndexFiles(luigi.Task):
     stateLocation = luigi.Parameter()
@@ -24,9 +25,9 @@ class CleanupIndexFiles(luigi.Task):
 
         with self.output().open("w") as outFile:
             output = {
-                'files' : filePaths
+                'files': filePaths
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'CleanupIndexFiles.json'))

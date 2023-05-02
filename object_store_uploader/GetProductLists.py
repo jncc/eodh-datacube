@@ -8,7 +8,7 @@ import re
 
 log = logging.getLogger('luigi-interface')
 
-#todo: use the CEDA api instead
+
 class GetProductLists(luigi.Task):
     startDate = luigi.DateParameter(default=datetime.date.today())
     endDate = luigi.DateParameter(default=datetime.date.today())
@@ -142,6 +142,6 @@ class GetProductLists(luigi.Task):
                 'ignored': ignoredProducts
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'GetProductLists.json'))

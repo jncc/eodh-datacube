@@ -25,7 +25,7 @@ The root user for the machine will use the same ssh key as your JASMIN cloud por
 
 2. ssh to the `datacube` machine
 
-        ssh root@<datacube_ip>
+        ssh root@<datacube_machine_ip>
 
 ### Configure a FreeIPA client
 
@@ -90,7 +90,7 @@ For first time server setup, you can follow [this guide](https://computingforgee
 
 By following the JASMIN guide: https://help.jasmin.ac.uk/article/285-system-administration-guidance-for-the-unmanaged-cloud
 
-### Set up a cube-in-a-box
+### Setup a cube-in-a-box
 
 Pull down the git repo and run their setup script which will install make, docker, and docker-compose, then start the docker service.
 
@@ -109,3 +109,77 @@ Log out then in again, then spin up the docker containers and initialise the dat
 At this point you have a "jupyter" container with jupyter notebook and the datacube cli, and a "postgres" container with an initialised but empty db. You can use the datacube cli like so:
 
     docker-compose exec jupyter datacube --version
+
+### Setup the datacube_ingester scripts
+
+
+The python scripts are relatively simple and can be setup by pulling the repo and then creating the mamba environment.
+
+1. Install mamba following their instructions [here](https://mamba.readthedocs.io/en/latest/installation.html)
+
+2. Clone this repo onto the machine
+
+        cd /data
+        git clone https://github.com/jncc/eodh-datacube.git
+        cd eodh-datacube/datacube_ingester
+
+3. Follow the setup instructions in the [datacube_ingester/README.md](../datacube_ingester/README.md) to create the mamba environment
+
+4. Create a `scripts`, `config`, and `processing` folder
+
+        mkdir /data/scripts /data/config /data/processing
+
+5. Add a `datacube-ingester-luigi.cfg`  and `object-store-secrets.json` file to `/data/config` using the examples [datacube-ingester-luigi.cfg.example](../datacube_ingester/datacube-ingester-luigi.cfg.example) and [object-store-secrets.json.example](../datacube_ingester/object-store-secrets.json.example).
+
+6. Add a `.datacube.conf` file to `/data/config` with contents like:
+
+        [datacube]
+        db_database: <db_name>
+        db_hostname: <datacube_machine_ip>
+        db_username: <username>
+        db_password: <password>
+
+6. Create an `ingest.sh` executable bash script in the `/data/scripts` folder to make running more convenient, with contents like so:
+
+        START_DATE=$1
+        END_DATE=$2
+
+        export DATACUBE_CONFIG_PATH="/data/config/.datacube.conf"
+
+        # Create dir to save state files in
+        timestamp=$(date +%Y%m%d%H%M%S)
+        stateDir="/data/processing/state/$timestamp"
+        mkdir -p $stateDir
+
+        source /data/conda/bin/activate
+        conda activate datacube_ingester_env
+
+        LUIGI_CONFIG_PATH=/data/config/datacube-ingester-luigi.cfg PYTHONPATH='/data/eodh-datacube' luigi --module datacube_ingester IngestIntoDatacube --startDate=$START_DATE --endDate=$END_DATE --stateLocation=$stateDir --cleanupFiles --local-scheduler
+
+    > Note: you may have to change the conda/mamba install path.
+
+## Indexing data
+
+You'll need to add product definitions (see [sen1_prod_spec.yaml](sen1_prod_spec.yaml) and [sen2_prod_spec.yaml](sen2_prod_spec.yaml)) and dataset documents (for each scene/granule) to the datacube for indexing.
+
+### Add product definitions
+
+On the datacube VM, add the product definition files (this only needs to be done once)
+
+    cd /data/cube-in-a-box/
+
+    docker-compose exec jupyter datacube product add "http://my-os-tenancy-o.jc.rl.ac.uk/sentinel1-ard/sen1_prod_spec.yaml?domain=my-os-tenancy-o.s3-ext.jc.rl.ac.uk&foo=foo.yaml"
+
+    docker-compose exec jupyter datacube product add "http://my-os-tenancy-o.s3-ext.jc.rl.ac.uk/sentinel2-ard/sen2_prod_spec.yaml?domain=my-os-tenancy-o.s3-ext.jc.rl.ac.uk&foo=foo.yaml"
+
+> Note: the URLs are a bit weird because of object store + datacube workarounds. You can also use local files if needed.
+
+### Add dataset documents
+
+Run the ingestion process by passing in the start and end dates to the `ingest.sh` script like so:
+
+    /data/scripts/ingest.sh 2020-01-01 2020-12-31
+
+> Note I haven't found a way of getting the datacube cli to accept object store URLs for the datasets, so the script currently downloads them.
+
+> If you're providing a large date range (e.g. a year) it can take ~5 hours to run.

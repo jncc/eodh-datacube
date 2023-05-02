@@ -6,6 +6,7 @@ import s3fs
 
 log = logging.getLogger('luigi-interface')
 
+
 class CheckProductFiles(luigi.Task):
     stateLocation = luigi.Parameter()
     product = luigi.DictParameter()
@@ -19,9 +20,12 @@ class CheckProductFiles(luigi.Task):
             with open(self.credentialsFilePath) as f:
                 jasmin_store_credentials = json.load(f)
 
-                jasmin_s3 = s3fs.S3FileSystem(anon=False, secret=jasmin_store_credentials['secret'],
+                jasmin_s3 = s3fs.S3FileSystem(
+                    anon=False,
+                    secret=jasmin_store_credentials['secret'],
                     key=jasmin_store_credentials['token'],
-                    client_kwargs={'endpoint_url': jasmin_store_credentials['endpoint_url']})
+                    client_kwargs={'endpoint_url': jasmin_store_credentials['endpoint_url']
+                                   })
 
                 for osFile in self.product['files']:
                     if not jasmin_s3.exists(osFile):
@@ -35,7 +39,6 @@ class CheckProductFiles(luigi.Task):
                 'files': self.product['files']
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-        
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, f'CheckProductFiles_{self.product["productName"]}.json'))

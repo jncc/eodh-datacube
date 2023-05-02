@@ -3,11 +3,11 @@ import os
 import logging
 import json
 import datetime
-import glob
 import s3fs
 import re
 
 log = logging.getLogger('luigi-interface')
+
 
 class GetIndexFileList(luigi.Task):
     startDate = luigi.DateParameter(default=datetime.date.today())
@@ -25,9 +25,13 @@ class GetIndexFileList(luigi.Task):
             with open(self.credentialsFilePath) as f:
                 jasmin_store_credentials = json.load(f)
 
-                jasmin_s3 = s3fs.S3FileSystem(anon=False, secret=jasmin_store_credentials['secret'],
+                jasmin_s3 = s3fs.S3FileSystem(
+                    anon=False,
+                    secret=jasmin_store_credentials['secret'],
                     key=jasmin_store_credentials['token'],
-                    client_kwargs={'endpoint_url': jasmin_store_credentials['endpoint_url']})
+                    client_kwargs={
+                        'endpoint_url': jasmin_store_credentials['endpoint_url']
+                        })
 
                 allProducts += jasmin_s3.glob(f'{self.s1BucketName}/*/*/*/S1*.yaml')
                 allProducts += jasmin_s3.glob(f'{self.s2BucketName}/*/*/*/S2*.yaml')
@@ -49,6 +53,6 @@ class GetIndexFileList(luigi.Task):
                 'indexFiles': indexFiles
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'GetIndexFileList.json'))

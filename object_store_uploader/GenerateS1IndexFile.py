@@ -10,6 +10,7 @@ from datetime import datetime
 
 log = logging.getLogger('luigi-interface')
 
+
 class GenerateS1IndexFile(luigi.Task):
     product = luigi.DictParameter()
     indexFilePath = luigi.Parameter()
@@ -67,7 +68,7 @@ class GenerateS1IndexFile(luigi.Task):
             boundingBox = rsgislib.imageutils.get_img_bbox(dataFilePath)
         else:
             epsgCode = '27700'
-            boundingBox = ['0.0','0.0','0.0','0.0']
+            boundingBox = ['0.0', '0.0', '0.0', '0.0']
 
         scn_info = {
             'id': str(uuid.uuid4()),

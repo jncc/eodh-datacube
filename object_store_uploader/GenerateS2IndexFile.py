@@ -12,6 +12,7 @@ log = logging.getLogger('luigi-interface')
 
 DATA_FILE_SUFFIX = '_vmsk_sharp_rad_srefdem_stdsref.tif'
 
+
 class GenerateS2IndexFile(luigi.Task):
     product = luigi.DictParameter()
     indexFilePath = luigi.Parameter()
@@ -86,7 +87,7 @@ class GenerateS2IndexFile(luigi.Task):
             boundingBox = rsgislib.imageutils.get_img_bbox(dataFilePath)
         else:
             epsgCode = '27700'
-            boundingBox = ['0.0','0.0','0.0','0.0']
+            boundingBox = ['0.0', '0.0', '0.0', '0.0']
 
         scn_info = {
             'id': str(uuid.uuid4()),

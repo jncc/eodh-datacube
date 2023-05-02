@@ -4,14 +4,14 @@ Upload ARD from the CEDA archive to the JASMIN object store for use by the datac
 
 ## Installation and setup
 
-Create conda env
+Create mamba env
 
 ```
 cd object_store_uploader
 
-conda env create -f environment.yaml
+mamba env create -f environment.yaml
 
-conda activate uploader_env
+mamba activate uploader_env
 ```
 
 ## Upload products by date range

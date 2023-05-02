@@ -1,14 +1,13 @@
 import luigi
 import os
 import logging
-import datetime
 import json
-
 from luigi.util import requires
 from object_store_uploader.GenerateDatacubeIndexFiles import GenerateDatacubeIndexFiles
 from object_store_uploader.UploadProductFiles import UploadProductFiles
 
 log = logging.getLogger('luigi-interface')
+
 
 @requires(GenerateDatacubeIndexFiles)
 class UploadProducts(luigi.Task):
@@ -23,7 +22,7 @@ class UploadProducts(luigi.Task):
         with self.input().open('r') as getProductLists:
             getProductListsInfo = json.load(getProductLists)
             products = getProductListsInfo['products']
-        
+
         tasks = []
         for product in products:
             productName = product['productName']
@@ -40,11 +39,11 @@ class UploadProducts(luigi.Task):
             objectStoreProductBasePath = os.path.join(bucket, year, month, date)
 
             tasks.append(UploadProductFiles(
-                stateLocation = self.stateLocation,
-                product = product,
-                objectStoreBasePath = objectStoreProductBasePath,
-                credentialsFilePath = self.credentialsFilePath,
-                testProcessing = self.testProcessing
+                stateLocation=self.stateLocation,
+                product=product,
+                objectStoreBasePath=objectStoreProductBasePath,
+                credentialsFilePath=self.credentialsFilePath,
+                testProcessing=self.testProcessing
             ))
 
         yield tasks
@@ -59,6 +58,6 @@ class UploadProducts(luigi.Task):
                 'products': objectStoreProducts
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'UploadProducts.json'))

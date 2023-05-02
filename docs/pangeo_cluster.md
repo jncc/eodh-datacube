@@ -15,11 +15,12 @@ Create a new pangeo cluster in the [JASMIN cloud portal](https://cloud.jasmin.ac
     * Worker size: `j4.large`
     * Root volume size (GB): `40`
     * External IP: `(pick one of the available options)`
-    * Admin IP ranges: `0.0.0.0/0`
+    * Admin IP ranges: `(provide an IP range)`
     * Dashboard domain: `(empty)`
     * Notebook CPUs: `4`
     * Notebook RAM (GB): `28`
     * Notebook storage (GB): `100`
     * Pangeo domain: `(empty)`
 
-Cluster creation takes around 20 minutes. Once created, you can login to the FreeIPA interface with the admin user at `https://\<your-hyphenated-external-ip\>.sslip.io/`. (If you get a login pop up from your browser, cancel it.)
+Cluster creation takes around 20 minutes. Once created, you can login to the FreeIPA interface with the admin user at `https://<your-hyphenated-external-ip>.sslip.io/`. (If you get a login pop up from your browser, cancel it.)
+

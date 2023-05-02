@@ -8,6 +8,7 @@ from datacube_ingester.GetIndexFileList import GetIndexFileList
 
 log = logging.getLogger('luigi-interface')
 
+
 @requires(GetIndexFileList)
 class DownloadIndexFiles(luigi.Task):
     stateLocation = luigi.Parameter()
@@ -25,9 +26,13 @@ class DownloadIndexFiles(luigi.Task):
             with open(self.credentialsFilePath) as f:
                 jasmin_store_credentials = json.load(f)
 
-                jasmin_s3 = s3fs.S3FileSystem(anon=False, secret=jasmin_store_credentials['secret'],
+                jasmin_s3 = s3fs.S3FileSystem(
+                    anon=False,
+                    secret=jasmin_store_credentials['secret'],
                     key=jasmin_store_credentials['token'],
-                    client_kwargs={'endpoint_url': jasmin_store_credentials['endpoint_url']})
+                    client_kwargs={
+                        'endpoint_url': jasmin_store_credentials['endpoint_url']
+                        })
 
                 for file in fileList:
                     filename = os.path.basename(file)
@@ -42,7 +47,7 @@ class DownloadIndexFiles(luigi.Task):
 
                 with open(testFilePath, 'w') as testFile:
                     testFile.write('TEST')
-                
+
                 downloadedFiles.append(testFilePath)
 
 
@@ -51,6 +56,6 @@ class DownloadIndexFiles(luigi.Task):
                 'files': downloadedFiles
             }
             outFile.write(json.dumps(output, indent=4, sort_keys=True))
-    
+
     def output(self):
         return luigi.LocalTarget(os.path.join(self.stateLocation, 'DownloadIndexFiles.json'))
