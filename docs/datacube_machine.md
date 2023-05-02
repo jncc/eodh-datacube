@@ -123,13 +123,13 @@ The python scripts are relatively simple and can be setup by pulling the repo an
         git clone https://github.com/jncc/eodh-datacube.git
         cd eodh-datacube/datacube_ingester
 
-3. Follow the setup instructions in the [datacube_ingester/README.md](../datacube_ingester/README.md) to create the mamba environment
+3. Follow the setup instructions in [datacube_ingester/README.md](../datacube_ingester/README.md) to create the mamba environment
 
 4. Create a `scripts`, `config`, and `processing` folder
 
         mkdir /data/scripts /data/config /data/processing
 
-5. Add a `datacube-ingester-luigi.cfg`  and `object-store-secrets.json` file to `/data/config` using the examples [datacube-ingester-luigi.cfg.example](../datacube_ingester/datacube-ingester-luigi.cfg.example) and [object-store-secrets.json.example](../datacube_ingester/object-store-secrets.json.example).
+5. Add a `datacube-ingester-luigi.cfg` and `object-store-secrets.json` file to `/data/config` using the examples [datacube-ingester-luigi.cfg.example](../datacube_ingester/datacube-ingester-luigi.cfg.example) and [object-store-secrets.json.example](../datacube_ingester/object-store-secrets.json.example).
 
 6. Add a `.datacube.conf` file to `/data/config` with contents like:
 
@@ -139,7 +139,7 @@ The python scripts are relatively simple and can be setup by pulling the repo an
         db_username: <username>
         db_password: <password>
 
-6. Create an `ingest.sh` executable bash script in the `/data/scripts` folder to make running more convenient, with contents like so:
+7. Create a helper script called `ingest.sh` in the `/data/scripts` folder to make running more convenient, with contents like so:
 
         START_DATE=$1
         END_DATE=$2
@@ -157,6 +157,11 @@ The python scripts are relatively simple and can be setup by pulling the repo an
         LUIGI_CONFIG_PATH=/data/config/datacube-ingester-luigi.cfg PYTHONPATH='/data/eodh-datacube' luigi --module datacube_ingester IngestIntoDatacube --startDate=$START_DATE --endDate=$END_DATE --stateLocation=$stateDir --cleanupFiles --local-scheduler
 
     > Note: you may have to change the conda/mamba install path.
+
+8. Make it an executable
+
+        chmod +x /data/scripts/ingest.sh
+
 
 ## Indexing data
 

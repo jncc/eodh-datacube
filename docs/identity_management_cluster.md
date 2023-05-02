@@ -39,6 +39,6 @@ To add a non admin user:
 3. Give them a `User login`, `First name`, `Last name`, and temporary `password` and click `Add`
 4. Select the user and navigate to their `User Groups` tab
 5. Click `Add` and add them to the `pangeo_notebook_users` group
-6. Ask them to login and reset their password
+6. Ask them to login and reset their password (I'd recommend using their temporary credentials to configure their notebook before doing this)
 
 For an admin user, you'll also need to add them to the `admins` group.
