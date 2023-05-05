@@ -12,7 +12,7 @@ The platform can be summarised in the diagram below.
 3. Users are onboarded onto the identity management system where they set up credentials to access JupyterLab.
 4. Users can then login to a JupyterLab environment where they can access the datacube API and the pangeo scientific analysis toolset.
 
-See docs section for more details.
+See `docs` section for more details on the set up process, and `notebooks` for example notebooks showing the creation of seasonal mosaics.
 
 ## JASMIN access prerequisites
 
